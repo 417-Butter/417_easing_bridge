@@ -1,0 +1,17 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Build files
+dist/
+build/
+
+# Temp
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
