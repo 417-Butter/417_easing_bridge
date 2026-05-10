@@ -17,7 +17,7 @@ from curve_math import generate_easing_table, CompositeBezier, BezierSegment
 # =====================================================================
 # HELP URL — Change this URL to your documentation page before release
 # =====================================================================
-HELP_URL = "https://example.com/easing-bridge-help"
+HELP_URL = "https://github.com/417-Butter/417_easing_bridge"
 
 # Settings file path (next to this script, stays in the zip)
 SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "settings.json")
