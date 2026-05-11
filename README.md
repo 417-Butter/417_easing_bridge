@@ -23,8 +23,8 @@ Cascadeurで使えるイージングアドオンです。<br>
 
 ## ■ インストール方法
 1. [リリースページ](../../releases) から最新版をダウンロードします。
-2. [to_Cascadeur]フォルダ内にある [easing_bridge.py]を、Cascadeurの[commands]フォルダ内にコピーします。
-   - **パスの例:** `C:\Program Files\Cascadeur\resources\scripts\python\commands`
+2. [to_Cascadeur]フォルダ内にある [easing_bridge.py]を、Cascadeurの[commands]フォルダ内にコピーします。<br>
+　**パスの例:** `C:\Program Files\Cascadeur\resources\scripts\python\commands`<br>
 
 　これで準備完了です。
 
@@ -32,8 +32,8 @@ Cascadeurで使えるイージングアドオンです。<br>
 1. `417_Easing_Bridge.exe`を起動します。
 2. Cascadeurでオブジェクトとフレーム区間を選択します。
 3. こちらのEasing Bridge GUIでカーブをデザインします。
-4. Cascadeurで **Ctrl+B** / **Cmd+B** を押してカーブをベイクします。
-   （または メニューバー > `Commands` > `Easing Bridge_417` > `Bake`）
+4. Cascadeurで **Ctrl+B** / **Cmd+B** を押してカーブをベイクします。<br>
+（または メニューバー > `Commands` > `Easing Bridge_417` > `Bake`）
 
 ## ■ ショートカット
 [Caascadeur]<br>
