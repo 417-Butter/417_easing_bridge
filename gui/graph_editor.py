@@ -1,12 +1,13 @@
 from PySide6.QtWidgets import (QGraphicsView, QGraphicsScene, QGraphicsItem, 
                              QGraphicsPathItem, QGraphicsEllipseItem, QGraphicsLineItem,
                              QApplication)
-from PySide6.QtGui import QPen, QColor, QPainter, QBrush, QPainterPath, QPixmap, QImage
+from PySide6.QtGui import QPen, QColor, QPainter, QBrush, QPainterPath, QPixmap, QImage, QTransform
 from PySide6.QtCore import Qt, QPointF, Signal, QRectF, QTimer
 
 from curve_math import BezierSegment, CompositeBezier
 
 MAX_UNDO = 50
+FIT_EXTRA_ZOOM = 1.15 ** 2
 
 
 class DraggablePoint(QGraphicsEllipseItem):
@@ -250,6 +251,7 @@ class BezierGraphEditor(QGraphicsView):
         self._is_updating = True
         try:
             modifiers = QApplication.keyboardModifiers()
+            shift_held = bool(modifiers & Qt.ShiftModifier)
             alt_held = bool(modifiers & Qt.AltModifier)
 
             for i in range(len(self.nodes)):
@@ -257,29 +259,40 @@ class BezierGraphEditor(QGraphicsView):
                 a_pos = anchor.pos()
             
                 if point_item == cout:
-                    min_x = a_pos.x() + self._min_tangent_len
+                    min_x = a_pos.x()
                     point_item.min_x = min_x
                     if i < len(self.nodes) - 1:
                         point_item.max_x = self.nodes[i + 1][0].pos().x()
                     if new_pos.x() < min_x:
                         new_pos.setX(min_x)
-                    # Alt: symmetric mirror
-                    if alt_held and cin:
+                    # Shift: symmetric mirror
+                    if shift_held and cin:
                         dx = new_pos.x() - a_pos.x()
                         dy = new_pos.y() - a_pos.y()
                         cin.setPos(QPointF(a_pos.x() - dx, a_pos.y() - dy))
+                    # Alt: X-mirror (V-shape)
+                    elif alt_held and cin:
+                        dx = new_pos.x() - a_pos.x()
+                        dy = new_pos.y() - a_pos.y()
+                        cin.setPos(QPointF(a_pos.x() - dx, a_pos.y() + dy))
 
                 elif point_item == cin:
-                    max_x = a_pos.x() - self._min_tangent_len
+                    max_x = a_pos.x()
                     point_item.max_x = max_x
                     if i > 0:
                         point_item.min_x = self.nodes[i - 1][0].pos().x()
                     if new_pos.x() > max_x:
                         new_pos.setX(max_x)
-                    if alt_held and cout:
+                    # Shift: symmetric mirror
+                    if shift_held and cout:
                         dx = new_pos.x() - a_pos.x()
                         dy = new_pos.y() - a_pos.y()
                         cout.setPos(QPointF(a_pos.x() - dx, a_pos.y() - dy))
+                    # Alt: X-mirror (V-shape)
+                    elif alt_held and cout:
+                        dx = new_pos.x() - a_pos.x()
+                        dy = new_pos.y() - a_pos.y()
+                        cout.setPos(QPointF(a_pos.x() - dx, a_pos.y() + dy))
 
                 elif point_item == anchor:
                     if i > 0:
@@ -345,7 +358,6 @@ class BezierGraphEditor(QGraphicsView):
         if record_undo:
             self.push_undo()
         self._load_state_no_undo(segments_data)
-        self.fit_to_view()
 
     def get_current_data(self):
         segments_data = []
@@ -369,12 +381,13 @@ class BezierGraphEditor(QGraphicsView):
         # Alt+Click on anchor: reset tangents
         if event.button() == Qt.LeftButton and event.modifiers() & Qt.AltModifier:
             pos = self.mapToScene(event.pos())
-            for i, node in enumerate(self.nodes):
-                anchor = node[0]
-                if anchor.contains(anchor.mapFromScene(pos)):
-                    self.reset_tangents_for_anchor(i)
-                    event.accept()
-                    return
+            for item in self._scene.items(pos):
+                if isinstance(item, DraggablePoint) and getattr(item, 'is_anchor', False):
+                    for i, node in enumerate(self.nodes):
+                        if node[0] == item:
+                            self.reset_tangents_for_anchor(i)
+                            event.accept()
+                            return
 
         # Capture undo snapshot when a drag starts on any DraggablePoint
         if event.button() == Qt.LeftButton:
@@ -424,6 +437,38 @@ class BezierGraphEditor(QGraphicsView):
 
     def fit_to_view(self):
         self.fitInView(self._scene.sceneRect(), Qt.KeepAspectRatio)
+        self.scale(FIT_EXTRA_ZOOM, FIT_EXTRA_ZOOM)
+
+    def get_view_state(self):
+        transform = self.transform()
+        center = self.mapToScene(self.viewport().rect().center())
+        return {
+            "m11": transform.m11(),
+            "m12": transform.m12(),
+            "m13": transform.m13(),
+            "m21": transform.m21(),
+            "m22": transform.m22(),
+            "m23": transform.m23(),
+            "m31": transform.m31(),
+            "m32": transform.m32(),
+            "m33": transform.m33(),
+            "center_x": center.x(),
+            "center_y": center.y(),
+        }
+
+    def set_view_state(self, state):
+        if not isinstance(state, dict):
+            return
+        try:
+            transform = QTransform(
+                state.get("m11", 1.0), state.get("m12", 0.0), state.get("m13", 0.0),
+                state.get("m21", 0.0), state.get("m22", 1.0), state.get("m23", 0.0),
+                state.get("m31", 0.0), state.get("m32", 0.0), state.get("m33", 1.0),
+            )
+            self.setTransform(transform)
+            self.centerOn(QPointF(state.get("center_x", 200.0), state.get("center_y", 200.0)))
+        except Exception:
+            pass
 
     # ── thumbnail ─────────────────────────────
 

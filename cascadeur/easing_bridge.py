@@ -1,3 +1,4 @@
+# Author: 417_Butter
 import csc
 import json
 import socket
@@ -12,26 +13,47 @@ import sys
 import platform
 
 # ==============================================================
-# ホットキー自動登録（Windowsのみ — Mac/Linuxではスキップ）
+# ホットキー自動登録 (Win / Mac / Linux 対応版)
 # ==============================================================
 def setup_initial_hotkey():
-    if platform.system() != 'Windows':
-        return  # Mac/LinuxではCascadeurのホットキーINIが異なるためスキップ
-
-    target_command_ini = "📈Easing%20Bridge.Bake"  
-    target_hotkey = "Ctrl+B"               
-
-    local_app_data = os.environ.get('LOCALAPPDATA')
-    if not local_app_data:
-        return
+    # INI書き込み用のコマンド名（半角スペースは %20 にエスケープ）
+    target_command_ini = "Easing%20Bridge_417.Bake"  
+    system = platform.system()
     
-    ini_path = os.path.join(local_app_data, "Nekki Limited", "Cascadeur", "Hotkey_settings.ini")
+    # OSに合わせてホットキーを動的に変更
+    if system == 'Darwin':
+        target_hotkey = "Cmd+B"   # Macの場合は Command+B
+    else:
+        target_hotkey = "Ctrl+B"  # Win/Linuxの場合は Ctrl+B
+
+    # 1. OSごとに設定フォルダのパスを特定する
+    if system == 'Windows':
+        local_app_data = os.environ.get('LOCALAPPDATA')
+        if not local_app_data:
+            return
+        ini_dir = os.path.join(local_app_data, "Nekki Limited", "Cascadeur")
+        
+    elif system == 'Linux':
+        ini_dir = os.path.join(os.path.expanduser('~'), ".local", "share", "Nekki Limited", "Cascadeur")
+        
+    elif system == 'Darwin': # Mac OS
+        ini_dir = os.path.join(os.path.expanduser('~'), "Library", "Application Support", "Nekki Limited", "Cascadeur")
+        if not os.path.exists(ini_dir):
+            ini_dir = os.path.join(os.path.expanduser('~'), ".local", "share", "Nekki Limited", "Cascadeur")
+            
+    else:
+        return # 未知のOSはスキップ
+
+    # 2. iniファイルの存在確認
+    ini_path = os.path.join(ini_dir, "Hotkey_settings.ini")
     if not os.path.exists(ini_path):
         return
 
+    # 3. 登録処理
     with open(ini_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
+    # 既に登録済みの場合はスキップ
     for line in lines:
         if line.strip().startswith(target_command_ini + "="):
             return 
@@ -51,7 +73,7 @@ def setup_initial_hotkey():
     with open(ini_path, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
     
-    print(f"[Easing Bridge.Bake] に[{target_hotkey}] を自動登録しました！(次回起動時から有効)")
+    print(f"[Easing Bridge_417.Bake] に[{target_hotkey}] を自動登録しました！(次回起動時から有効)")
 
 try:
     setup_initial_hotkey()
@@ -76,7 +98,7 @@ def _get_config_dir():
 _log_dir = _get_config_dir()
 os.makedirs(_log_dir, exist_ok=True)
 LOG_FILE = os.path.join(_log_dir, 'easing_bridge_bake.log')
-_log_buf =[]
+_log_buf = []
 
 def log(msg):
     _log_buf.append(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {msg}")
@@ -90,7 +112,8 @@ def flush_log():
         pass
 
 def command_name():
-    return "📈Easing Bridge.Bake"
+    # ツール上の登録名
+    return "Easing Bridge_417.Bake"
 
 # --------------------------------------------------------------
 # 1. 外部GUIへのFetch機能
@@ -125,7 +148,8 @@ def fetch_data_and_send(scene, host='127.0.0.1', port=65432):
                 "obj_ids":[str(obj_id) for obj_id in obj_ids]
             })
 
-    scene.modify("📈Easing Bridge.Fetch", mod)
+    # Modifyの名前も統一
+    scene.modify("Easing Bridge_417.Fetch", mod)
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -350,7 +374,7 @@ def run(scene):
             except Exception:
                 pass
 
-            target_node_names =[]
+            target_node_names = []
 
             if is_point or is_camera:
                 target_node_names.extend(['Position', 'Rotation'])
@@ -371,7 +395,7 @@ def run(scene):
                     actuals.add(node_objects[n].data_id())
 
             if not valid_nodes:
-                fallback_nodes =['Position', 'Rotation', 'Local Position', 'Local Rotation', 'Local Scale']
+                fallback_nodes = ['Position', 'Rotation', 'Local Position', 'Local Rotation', 'Local Scale']
                 for n in fallback_nodes:
                     if n in node_objects and n not in [v[0] for v in valid_nodes]:
                         valid_nodes.append((n, node_objects[n]))
@@ -383,7 +407,7 @@ def run(scene):
 
             orig_values = {}
             for node_name, obj in valid_nodes:
-                orig_values[node_name] =[]
+                orig_values[node_name] = []
                 for frame in frames:
                     orig_values[node_name].append(obj.value(frame))
 
@@ -408,8 +432,6 @@ def run(scene):
             t = easing_table[i]
             src_pos = t * (total_frames - 1)
             
-            # 💡【修正箇所】: バグの元になっていたクリッピングを廃止し、
-            # 最初にご提示いただいた「オーバーシュート（外挿）を正しく計算できる完璧なロジック」に復元しました。
             if total_frames > 1:
                 if src_pos < 0.0:
                     src_lo, src_hi = 0, 1

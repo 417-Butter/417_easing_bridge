@@ -1,0 +1,21 @@
+{
+    "presets": {},
+    "order": [],
+    "default_order": [
+        "Linear",
+        "Ease In (Quad)",
+        "Ease Out (Quad)",
+        "Ease In Out (Quad)",
+        "Ease In Out (Back)",
+        "Bounce",
+        "Cool",
+        "boyoyon",
+        "Snap",
+        "Sharp Snap",
+        "Overshoot Bounce",
+        "Wobble",
+        "Staircase",
+        "Heartbeat"
+    ],
+    "favorites": []
+}
