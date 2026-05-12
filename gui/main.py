@@ -4,11 +4,26 @@ import os
 import socket
 import traceback
 import datetime
+import ctypes  # 追加: Windowsタスクバー用
 from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtGui import QIcon  # 追加: アイコン読み込み用
 from easing_bridge_app import EasingBridgeApp
 
+def resource_path(relative_path):
+    """PyInstallerでexe化した場合と、通常実行時の両方で正しいファイルの場所を取得する"""
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+def get_executable_dir():
+    """exe化された場合、一時フォルダではなくexe本体と同じディレクトリを取得する(ログ保存用)"""
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.abspath(__file__))
+
 # ── Error log ─────────────────────────────────
-LOG_DIR = os.path.dirname(os.path.abspath(__file__))
+# 修正: exe化した時に見えない一時フォルダにログが作られるのを防ぐ
+LOG_DIR = get_executable_dir()
 ERROR_LOG = os.path.join(LOG_DIR, "error.log")
 
 def setup_error_logging():
@@ -48,6 +63,13 @@ def is_already_running(port=65432):
         return False
 
 def main():
+    # 追加: Windowsタスクバーに正しいアイコンを表示させるためのおまじない
+    try:
+        myappid = '417_Butter.EasingBridge.App.1_0' # 任意のID
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    except Exception:
+        pass
+
     setup_error_logging()
 
     # Single instance check
@@ -56,6 +78,11 @@ def main():
         sys.exit(0)
 
     app = QApplication(sys.argv)
+
+    # 追加: ここでアプリのアイコンを設定する
+    icon_path = resource_path('icon.ico')
+    app.setWindowIcon(QIcon(icon_path))
+
     app.setStyle("Fusion")
     
     dark_stylesheet = """
