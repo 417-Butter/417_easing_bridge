@@ -38,6 +38,7 @@ Cascadeurで使えるイージングアドオンです。<br>
 （または メニューバー > `Commands` > `Easing Bridge_417` > `Bake`）
 > 💡 ショートカットの登録方法： <br>
 > メニューバー > `Settings` > `Hotkeys Window` > `検索：417` > `[Easing Bridge_417.Bake]に\[Ctrl+B]を登録`
+
 ## ■ ショートカット
 [Cascadeur]<br>
 - **Ctrl+B** / **Cmd+B** : カーブをベイク
