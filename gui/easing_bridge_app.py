@@ -359,9 +359,9 @@ class EasingBridgeApp(QMainWindow):
         sidebar_layout.setContentsMargins(0, 0, 0, 0)
 
         self.preset_tabs = QTabWidget()
-        self.default_preset_list = self._create_preset_list("default", allow_reorder=True)
-        self.custom_preset_list = self._create_preset_list("custom", allow_reorder=True)
-        self.favorite_preset_list = self._create_preset_list("favorite", allow_reorder=True)
+        self.default_preset_list = self._create_preset_list("default")
+        self.custom_preset_list = self._create_preset_list("custom")
+        self.favorite_preset_list = self._create_preset_list("favorite")
         self.preset_tabs.addTab(self.default_preset_list, self.tr("initial_presets"))
         self.preset_tabs.addTab(self.custom_preset_list, self.tr("user_presets"))
         self.preset_tabs.addTab(self.favorite_preset_list, self.tr("favorites"))
@@ -527,11 +527,11 @@ class EasingBridgeApp(QMainWindow):
     def fit_graph(self):
         self.graph_editor.fit_to_view()
 
-    def _create_preset_list(self, group, allow_reorder=False):
+    def _create_preset_list(self, group):
         preset_list = PresetListWidget(group, self.toggle_preset_favorite)
         preset_list.setProperty("preset_group", group)
         preset_list.setViewMode(QListWidget.IconMode)
-        preset_list.setMovement(QListWidget.Free if allow_reorder else QListWidget.Static)
+        preset_list.setMovement(QListWidget.Static)
         preset_list.setIconSize(QSize(100, 100))
         preset_list.setGridSize(QSize(120, 140))
         preset_list.setResizeMode(QListWidget.Adjust)
@@ -539,15 +539,6 @@ class EasingBridgeApp(QMainWindow):
         preset_list.setWordWrap(True)
         preset_list.itemClicked.connect(self.on_preset_selected)
         preset_list.itemDoubleClicked.connect(self.rename_selected_preset)
-        if allow_reorder:
-            preset_list.setDragEnabled(True)
-            preset_list.setAcceptDrops(True)
-            preset_list.viewport().setAcceptDrops(True)
-            preset_list.setDragDropMode(QListWidget.InternalMove)
-            preset_list.setDragDropOverwriteMode(False)
-            preset_list.setDefaultDropAction(Qt.MoveAction)
-            preset_list.setDropIndicatorShown(True)
-            preset_list.model().rowsMoved.connect(lambda *args, g=group: self._on_preset_order_changed(g))
         return preset_list
 
     def _thumbnail_with_star(self, data, name):
@@ -859,12 +850,17 @@ class EasingBridgeApp(QMainWindow):
             data = self.graph_editor.get_current_data()
             comp = CompositeBezier([BezierSegment(*seg) for seg in data])
             table = generate_easing_table(comp, frame_count)
+            
+            import sys, os
+            gui_dir = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.path.dirname(os.path.abspath(sys.argv[0]))
+            
             self.server.send_response(client, {
                 "command": "CURVE_DATA",
                 "frame_start": start,
                 "frame_end": end,
                 "easing_table": table,
                 "allow_overshoot": True,
+                "gui_dir": gui_dir,
             })
         except Exception as e:
             self.log_message(f"Error: {e}")

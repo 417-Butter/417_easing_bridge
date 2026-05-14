@@ -11,6 +11,7 @@ import datetime
 import time
 import sys
 import platform
+import tempfile
 
 # ==============================================================
 # ホットキー自動登録 (Win / Mac / Linux 対応版)
@@ -53,10 +54,18 @@ def setup_initial_hotkey():
     with open(ini_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    # 既に登録済みの場合はスキップ
+    # 既に登録済みの場合はスキップ、またはショートカットキーが他の機能で使われている場合もスキップ
     for line in lines:
-        if line.strip().startswith(target_command_ini + "="):
+        stripped = line.strip()
+        if stripped.startswith(target_command_ini + "="):
             return 
+        
+        # 既にCtrl+Bなどが他の機能に割り当てられているかチェック
+        if "=" in stripped:
+            key_assigned = stripped.split("=", 1)[1].strip()
+            if key_assigned.lower() == target_hotkey.lower():
+                print(f"[{target_hotkey}] は既に他の機能に割り当てられているため、自動登録をスキップしました。")
+                return
 
     new_lines =[]
     section_found = False
@@ -85,35 +94,30 @@ except Exception:
 # コマンド本体
 # ==============================================================
 
-def _get_config_dir():
-    system = platform.system()
-    if system == 'Windows':
-        base = os.environ.get('APPDATA', os.path.expanduser('~'))
-    elif system == 'Darwin':
-        base = os.path.join(os.path.expanduser('~'), 'Library', 'Application Support')
-    else:
-        base = os.environ.get('XDG_CONFIG_HOME', os.path.join(os.path.expanduser('~'), '.config'))
-    return os.path.join(base, 'EasingBridge')
+def command_name():
+    # ツール上の登録名
+    return "Easing Bridge_417.Bake"
 
-_log_dir = _get_config_dir()
-os.makedirs(_log_dir, exist_ok=True)
-LOG_FILE = os.path.join(_log_dir, 'easing_bridge_bake.log')
 _log_buf = []
 
 def log(msg):
-    _log_buf.append(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {msg}")
+    msg_str = f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {msg}"
+    _log_buf.append(msg_str)
 
-def flush_log():
+def flush_log(gui_dir=None):
     try:
-        with open(LOG_FILE, "w", encoding="utf-8") as f:
+        if gui_dir and os.path.exists(gui_dir):
+            log_file = os.path.join(gui_dir, 'easing_bridge_bake.log')
+        else:
+            temp_dir = tempfile.gettempdir()
+            log_file = os.path.join(temp_dir, 'easing_bridge_bake.log')
+            
+        with open(log_file, "w", encoding="utf-8") as f:
             f.write("\n".join(_log_buf) + "\n")
         _log_buf.clear()
     except Exception:
         pass
 
-def command_name():
-    # ツール上の登録名
-    return "Easing Bridge_417.Bake"
 
 # --------------------------------------------------------------
 # 1. 外部GUIへのFetch機能
@@ -320,6 +324,7 @@ def run(scene):
         return
 
     easing_table = curve_data.get("easing_table",[])
+    gui_dir = curve_data.get("gui_dir")
 
     log(f"\n{'='*60}")
     log(f"BAKE START  {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -336,7 +341,7 @@ def run(scene):
 
         if len(easing_table) < len(frames):
             scene.error("Easing table missing or too short!")
-            flush_log()
+            flush_log(gui_dir)
             return
 
         ALL_POSSIBLE_NODES =[
@@ -428,6 +433,19 @@ def run(scene):
         for d in obj_data:
             all_actuals.update(d['actuals'])
 
+        # 事前に全フレーム区間をFixed補間に強制変更しておく（Inbetween等だと値が上書きされてしまうため）
+        def force_fixed(section):
+            section.interval.interpolation = csc.layers.layer.Interpolation.FIXED
+
+        for d in obj_data:
+            try:
+                layer_id = lv.layer_id_by_obj_id(d['obj_id'])
+                if len(frames) > 1:
+                    for frame in range(frames[0], frames[-1]):
+                        le.change_section(frame, layer_id, force_fixed)
+            except Exception as e:
+                log(f"Failed to force Fixed interpolation: {e}")
+
         for i, frame in enumerate(frames):
             t = easing_table[i]
             src_pos = t * (total_frames - 1)
@@ -458,14 +476,7 @@ def run(scene):
 
             scene_updater.run_update(all_actuals, frame)
 
-        for d in obj_data:
-            try:
-                layer_id = lv.layer_id_by_obj_id(d['obj_id'])
-                le.set_fixed_interpolation_if_need(layer_id, start_frame, end_frame)
-            except Exception:
-                pass
-
-        flush_log()
+        flush_log(gui_dir)
         scene.success(f"Easing Bridge: Bake successfully applied to {len(obj_data)} objects!")
 
     scene.modify_update_with_session(command_name(), mod)

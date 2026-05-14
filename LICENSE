@@ -1,0 +1,110 @@
+End User License Agreement (EULA)
+
+Copyright (c) 2026 417_Butter
+All Rights Reserved.
+
+By downloading, installing, or using this software ("417_Easing_Bridge"), you
+agree to be bound by the terms and conditions of this license agreement.
+
+1. Copyright and Intellectual Property All copyrights and intellectual property
+rights to this software (including but not limited to source code, executable
+files, UI design, icon images, and related documentation) belong to the author
+(417_Butter). All rights not expressly granted are reserved by the author.
+
+2. Grant of License You may use this software free of charge for personal,
+educational, or commercial animation production. However, commercial use of the
+software itself (e.g., selling or renting the software) is strictly prohibited.
+
+3. Prohibitions Unless expressly permitted by the author, you are strictly
+prohibited from engaging in the following acts:
+
+  - Unauthorized redistribution, reprinting, sale, rental, or sublicensing of
+    this software or any part thereof.
+  - Reverse engineering, decompiling, or disassembling the executable file
+    (.exe), except to the extent permitted by applicable law or the licenses of
+    third-party components.
+  - Unauthorized extraction or diversion of resources (images, UI design, etc.)
+    that make up this software.
+  - Misrepresenting the identity of the author or using the software in a way
+    that misleads third parties.
+
+4. Modification Modification of the software (such as Python scripts) is
+permitted strictly for personal use within the scope of using this add-on.
+However, publishing or distributing any modified version to third parties is
+strictly prohibited.
+
+5. Feedback The author may freely use any feedback, bug reports, suggestions, or
+ideas provided by users regarding this software for its improvement and
+development, without any compensation or restriction.
+
+6. Credit / Attribution When publishing works created using this software,
+crediting the software (e.g., "Easing Tool: 417_Easing_Bridge") is optional but
+highly appreciated.
+
+7. Third-Party Components This software uses open-source libraries such as
+PySide6 (LGPL v3.0). These third-party components are subject to their
+respective license terms, which supersede this agreement only regarding the
+specific components.
+
+8. Support and Updates The author is under no obligation to provide bug fixes,
+updates, or technical support for this software.
+
+9. Disclaimer of Warranty This software is provided "as is," without warranty of
+any kind, express or implied, including but not limited to the warranties of
+merchantability, fitness for a particular purpose, and non-infringement. Use it
+at your own risk.
+
+10. Limitation of Liability In no event shall the author be held liable for any
+direct, indirect, incidental, special, or consequential damages (including but
+not limited to data loss, business interruption, hardware damage, or loss of
+profits) arising out of the use or inability to use this software.
+
+11. Governing Law This license agreement shall be governed by and construed in
+accordance with the laws of Japan.
+
+==================================================
+
+【日本語版 / Japanese】
+
+エンドユーザー使用許諾契約（EULA）
+
+Copyright (c) 2026 417_Butter
+All Rights Reserved.
+
+本ソフトウェア（「417_Easing_Bridge」）をダウンロード、インストール、または使用することにより、お客様は以下の利用条件に同意したものとみなされます。
+
+1. 著作権および知的財産権
+本ソフトウェア（ソースコード、実行ファイル、UIデザイン、アイコン画像、関連ドキュメントを含むすべて）の著作権および知的財産権は、作者（417_Butter）に帰属します。本契約によって明示的に許諾されていないすべての権利は、作者が留保します。
+
+2. 利用許諾
+本ソフトウェアは、個人・法人を問わず、アニメーション制作などの用途（商用作品の制作を含む）において無償でご利用いただけます。ただし、本ソフトウェア自体の商用利用（販売、貸与など）は固く禁止します。
+
+3. 禁止事項 作者からの事前の許可がない限り、以下の行為を固く禁止します。
+
+  - 本ソフトウェアまたはその一部の無断での再配布、転載、販売、貸与、サブライセンス。
+  - 実行ファイル（.exe）のリバースエンジニアリング、逆コンパイル、逆アセンブル（ただし、サードパーティ製ライブラリのライセンスで許可されている範囲を除く）。
+  - 本ソフトウェアを構成するリソース（画像、UIデザインなど）の無断抽出および別ソフトウェアへの流用。
+  - 作者の身元を偽る行為、または第三者に誤解を与える形での利用。
+
+4. 改造・改変について
+本アドオンとしての私的利用の範囲内に限り、スクリプト等の改造を許可します。ただし、改造したバージョンを第三者へ公開・配布することは固く禁止します。
+
+5. フィードバックの取り扱い
+ユーザーが本ソフトウェアに関して提供したバグ報告、提案、アイデア等のフィードバックについて、作者は無償かつ制限なく本ソフトウェアの改善や開発に利用できるものとします。
+
+6. クレジット表記について
+本ソフトウェアを使用して制作された作品を公開する際、本ソフトウェアのクレジット表記は任意ですが、記載していただけると作者の大きな励みになります（例:
+Easing Tool: 417_Easing_Bridge）。
+
+7. サードパーティ製コンポーネント 本ソフトウェアは、PySide6（LGPL
+v3.0）などのオープンソースライブラリを利用して構築されています。これらのライブラリ部分については、それぞれのライセンス条項が適用されます。
+
+8. サポートおよびアップデート 作者は、本ソフトウェアに対するバグの修正、アップデートの提供、およびテクニカルサポートを提供する義務を一切負いません。
+
+9. 免責事項 本ソフトウェアは「現状有姿（As
+is）」で提供され、明示的にも黙示的にもいかなる保証（特定の目的への適合性、安全性、エラーがないことの保証を含む）も行いません。本ソフトウェアの使用は自己責任で行ってください。
+
+10. 責任の制限（損害賠償）
+本ソフトウェアの使用、または使用できなかったことに起因するいかなる直接的、間接的、偶発的、特殊な損害（データの消失、業務の中断、ハードウェアの損傷、利益の損失などを含む）についても、作者は一切の責任を負いません。
+
+11. 準拠法 本ライセンスの解釈および適用は、日本国法に準拠するものとします。
