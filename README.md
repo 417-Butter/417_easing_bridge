@@ -2,111 +2,114 @@
 
 🌍 **Multilingual UI Supported (EN/JP/KR/CN)**
 
-Cascadeurで使えるイージングアドオンです。<br>
-簡単・便利・かっこいい！<br>
-<br>
-🔴説明は必ず一番下まで見てね！
+This is an easing add-on for Cascadeur.<br>
+**SIMPLE, CONVENIENT, and AWESOME!**<br>
+
+It will make your animations even MORE captivating 💫
 
 <br>
 
-## 🎬 参考動画
+## 🎬 Reference Video
 
-※クリックで **YouTube** にとびます。
+*Click to open **YouTube**.
 
-[![417_Easing_Bridge 紹介動画](🔴あとで貼る)
+[![417_Easing_Bridge Introduction Video](🔴To be pasted later)
 
 <br>
 
-## 🚀 インストール・使い方
+## 🚀 Installation & Usage
 
-本アプリは、**Cascadeur用のスクリプト**と、**イージング操作用のGUIアプリ（.exe）**の2つを組み合わせて使用します。
+This application is used by combining a **script for Cascadeur** and a **GUI application (.exe) for easing operations**.
 
 
-## ■ インストール方法
-1. [リリースページ](../../releases) から最新版をダウンロードします。
-2. [to_Cascadeur]フォルダ内にある [easing_bridge.py]を、Cascadeurの[commands]フォルダ内にコピーします。<br>
-　**パスの例:** `C:\Program Files\Cascadeur\resources\scripts\python\commands`<br>
+## ■ Installation
+1. Download the latest version from the [Releases page](../../releases).
+2. Copy `easing_bridge.py` from the `to_Cascadeur` folder to Cascadeur's `commands` folder.<br>
+　**Path example:** `C:\Program Files\Cascadeur\resources\scripts\python\commands`<br>
 
-　これで準備完了です。
+　Now you are ready to go.
  
 
-## ■ 使い方
-1. `417_Easing_Bridge.exe`を起動します。
-2. Cascadeurでオブジェクトとフレーム区間を選択します。
-3. こちらのEasing Bridge GUIでカーブをデザインします。
-4. Cascadeurで **Ctrl+B** / **Cmd+B** を押してカーブをベイクします。<br>
-（または メニューバー > `Commands` > `Easing Bridge_417` > `Bake`）
-> 💡 ショートカットの登録方法： <br>
-> メニューバー > `Settings` > `Hotkeys Window` > `検索：417` > `[Easing Bridge_417.Bake]`に`[Ctrl+B]`を登録
+## ■ Usage
+1. Launch `417_Easing_Bridge.exe`.
+2. Select an object and an interval of frames in Cascadeur.
+3. Design the curve using the Easing Bridge GUI.
+4. Press **Ctrl+B** / **Cmd+B** in Cascadeur to bake the curve.<br>
+(Or go to Menu bar > `Commands` > `Easing Bridge_417` > `Bake`)
+> 💡 How to register the shortcut: <br>
+> Menu bar > `Settings` > `Hotkeys Window` > `Search: 417` > Register `[Ctrl+B]` to `[Easing Bridge_417.Bake]`
 
-## ■ ショートカット
+## ■ Shortcuts
 [Cascadeur]<br>
-- **Ctrl+B** / **Cmd+B** : カーブをベイク
+- **Ctrl+B** / **Cmd+B** : Bake curve
 
-[グラフアプリ]<br>
-- **ダブルクリック** (グラフ) : コントロールポイントを追加
-- **Alt+クリック** (アンカー) : タンジェントをリセット
-- **Shift+ドラッグ** (タンジェント) : 対称ミラー
-- **Alt+ドラッグ** (タンジェント) : X軸ミラー (V字)
-- **マウスホイール** : ズームイン/アウト
-- **背景をドラッグ** : ビューをパン
+[Graph App]<br>
+- **Double-click** (Graph) : Add a control point
+- **Alt+Click** (Anchor) : Reset tangent
+- **Shift+Drag** (Tangent) : Symmetrical mirror
+- **Alt+Drag** (Tangent) : X-axis mirror (V-shape)
+- **Mouse Wheel** : Zoom in/out
+- **Drag Background** : Pan view
 
 
-## ■ アンインストール方法
-1. **ショートカット設定の削除** <br>
-　Cascadeurの メニューバー > `Settings` > `Hotkeys Window` > `検索：417` > `Easing Bridge_417.Bake` に登録したショートカット設定を削除します。
-2. **スクリプトの削除** <br>
-　Cascadeurの `commands` フォルダにコピーした `easing_bridge.py` を削除します。<br>
-　パスの例: C:\Program Files\Cascadeur\resources\scripts\python\commands
-3. **アプリ本体の削除** <br>
-　展開した本アプリのフォルダ（例: `417_easing_bridge_v0.9.0`フォルダ）をごみ箱へ捨てます。
-
-<br>
-
-## ⚠️ 注意事項
-
-- イージング適用前に必ずシーンを保存（バックアップ）してください。
-- 適用時は、Cascadeurの画面をクリックしてアクティブ（選択状態）にしてください。
-- やり直すときは、`Ctrl+Z` で元に戻してから再度適用してください。
-- 初回起動時に `Ctrl+B` のショートカットが自動で割り当てられます。<br>（既に他の機能に割り当てられている場合は自動登録をスキップします）
-- 枠外にはみでるグラフでは、リグ構造上の仕様によりパーツが伸びたり挙動が変になる場合があります。
-- 動作がおかしいときは、Cascadeurや本アドオンの再起動・再インストールをお試しください。
-- その他の問題については、[issues](../../issues) をご覧ください。
-  解決しない場合は、[issues](../../issues)/[Ｘ](https://x.com/417_Butter)/[youtube](https://www.youtube.com/@417_Butter)にてご連絡ください。
+## ■ Uninstallation
+1. **Remove shortcut setting** <br>
+　Delete the shortcut registered to `Easing Bridge_417.Bake` via Cascadeur's Menu bar > `Settings` > `Hotkeys Window` > `Search: 417`.
+2. **Remove the script** <br>
+　Delete `easing_bridge.py` from Cascadeur's `commands` folder.<br>
+　Path example: `C:\Program Files\Cascadeur\resources\scripts\python\commands`
+3. **Delete the application** <br>
+　Move the extracted application folder (e.g., `417_easing_bridge_v0.9.0` folder) to the Recycle Bin.
 
 <br>
 
-## 💻 対応OS
+## ⚠️ Precautions
 
-- **Windows 11**<br>
-*(※ベータ版のため、開発者自身のPCでのみ動作確認を行った段階です。他のOSでの動作は未検証・保証外です。)*
+- Always save (backup) your scene before applying easing.
+- When applying, make sure to click the Cascadeur window to make it active.
+- If you want to redo the easing, press `Ctrl+Z` to undo it first, then apply it again.
+- The `Ctrl+B` shortcut will be automatically assigned upon the first launch.<br>(If it is already assigned to another function, the automatic registration will be skipped.)
+- For curves that exceed the graph boundaries, rig parts may stretch or behave unusually due to the specifications of the rig structure.
+- If it does not work properly, try restarting or reinstalling Cascadeur and this add-on.
+- For other issues, please check the [issues](../../issues) page.
+  If the problem persists, please contact the author via [issues](../../issues) / [X](https://x.com/417_Butter) / [YouTube](https://www.youtube.com/@417_Butter).
 
 <br>
 
-## 📜 ライセンスについて
+## 💻 SYSTEM REQUIREMENTS
+
+- **OS**: Windows 11
+- **Cascadeur**: ver. 2025.3 or later
+
+<br>
+
+## 📜 License
 
 **All Rights Reserved.**<br>
-本ソフトウェア（ソースコード、実行ファイル、UIデザイン、アイコン画像を含むすべて）の著作権は、作者に帰属します。<br>
-無断での再配布・販売・改造※は禁止です。(※改造は本アドオンとして私的利用の場合のみ可)<br>
-**免責事項**: 本アドオンは自己責任でご使用ください。トラブルや損害について作者は一切の責任を負いません。
+The copyright of this software (including source code, executable files, UI design, and icon images) belongs to the author.<br>
+Unauthorized redistribution, sale, or modification* is prohibited. (*Modification is allowed only for personal use within this add-on.)<br>
+**Disclaimer**: Use this add-on at your own risk. The author is not responsible for any troubles or damages caused by its use.
 
 <br>
 
-## 🛠️ 依存ライブラリとクレジット
+## 🛠️ Dependencies & Credits
 
-本アプリのGUI版実行ファイルは、以下のオープンソースプロジェクトを利用して構築されています。
+The GUI executable of this application is built using the following open-source projects:
 
-- **[PySide6](https://doc.qt.io/qtforpython/)**: LGPL v3.0 ライセンス
-- **[Python](https://www.python.org/)**: PSF ライセンス
-- （その他、pynputなど使用しているライブラリがあればここに記載）
+- **[PySide6](https://doc.qt.io/qtforpython/)**: LGPL v3.0 License
+- **[Python](https://www.python.org/)**: PSF License
+- *(If there are any other libraries used, such as pynput, list them here)*
 
 <br>
 
-## 🎁 その他特典
-- 🌐Cascadeurプラン15％off！ プロモコード：Butter<br>
-　  ▶[https://cascadeur.com/plans?ref=Butter](https://cascadeur.com/plans?ref=Butter)<br>
+## 🎁 SPECIAL OFFER
 
+🌐 **Get 15% OFF Cascadeur plans!**<br>
+　 Promo Code: Butter<br>
+　 ▶[Cascadeur Official Purchase Page Here!](https://cascadeur.com/plans?ref=Butter)
 
+<br>
 
-- 作者(417_Butter)：[X](https://x.com/417_Butter)　[Youtube](https://www.youtube.com/@417_Butter)<br>
-- Cascadeur講座やってるよ！▼<br>
+🎬 **I also make [Cascadeur tutorials](https://www.youtube.com/@417_Butter) on Youtube!**
+
+- Creator(417_Butter)：[X](https://x.com/417_Butter) | [YouTube](https://www.youtube.com/@417_Butter) | [GitHub](https://github.com/417-Butter/417_easing_bridge#-417_easing_bridge)
