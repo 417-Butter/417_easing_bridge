@@ -12,7 +12,8 @@ It will make your animations even MORE captivating 💫
 ## 🎬 Reference Video
 
 *Click to open **YouTube**.<br>
-▶[417_Easing_Bridge Introduction Video](https://youtu.be/ge5pJiImFQM)
+▶[417_Easing_Bridge Introduction Video<img width="960" height="540" alt="サムネ1" src="https://github.com/user-attachments/assets/dfe78911-b839-4670-b449-3e80d2b333f3" />
+](https://youtu.be/ge5pJiImFQM)
 
 <br>
 
