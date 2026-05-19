@@ -11,9 +11,8 @@ It will make your animations even MORE captivating 💫
 
 ## 🎬 Reference Video
 
-*Click to open **YouTube**.
-
-[![417_Easing_Bridge Introduction Video](🔴To be pasted later)
+*Click to open **YouTube**.<br>
+[417_Easing_Bridge Introduction Video](https://youtu.be/ge5pJiImFQM)
 
 <br>
 
