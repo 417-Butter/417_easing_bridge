@@ -5,7 +5,9 @@
 This is an easing add-on for Cascadeur.<br>
 **SIMPLE, CONVENIENT, and AWESOME!**<br>
 
-It will make your animations even MORE captivating 💫
+It will make your animations even MORE captivating 💫<br>
+
+⚠️Currently in beta testing.
 
 <br>
 
