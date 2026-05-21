@@ -65,7 +65,7 @@ def is_already_running(port=65432):
 def main():
     # 追加: Windowsタスクバーに正しいアイコンを表示させるためのおまじない
     try:
-        myappid = '417_Butter.EasingBridge.App.1_0' # 任意のID
+        myappid = '417_Butter.EasingBridge.App.0_9_1' # 任意のID
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
     except Exception:
         pass
