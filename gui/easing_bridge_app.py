@@ -215,6 +215,17 @@ class PresetListWidget(QListWidget):
                 return
         super().mousePressEvent(event)
 
+    def wheelEvent(self, event):
+        # IconModeのデフォルトスクロール量が大きすぎるので制限
+        scroll_bar = self.verticalScrollBar()
+        delta = event.angleDelta().y()
+        step = 40  # 1回あたりのスクロール量(px)
+        if delta > 0:
+            scroll_bar.setValue(scroll_bar.value() - step)
+        else:
+            scroll_bar.setValue(scroll_bar.value() + step)
+        event.accept()
+
 
 class EasingBridgeApp(QMainWindow):
     def __init__(self):
