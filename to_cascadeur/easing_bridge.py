@@ -433,18 +433,39 @@ def run(scene):
         for d in obj_data:
             all_actuals.update(d['actuals'])
 
-        # 事前に全フレーム区間をFixed補間に強制変更しておく（Inbetween等だと値が上書きされてしまうため）
+        # ==============================================================
+        # 補間の事前Fixed化（選択範囲にかかる補間セクションのみを正確に処理する）
+        # ==============================================================
         def force_fixed(section):
             section.interval.interpolation = csc.layers.layer.Interpolation.FIXED
 
-        for d in obj_data:
-            try:
-                layer_id = lv.layer_id_by_obj_id(d['obj_id'])
-                if len(frames) > 1:
-                    for frame in range(frames[0], frames[-1]):
-                        le.change_section(frame, layer_id, force_fixed)
-            except Exception as e:
-                log(f"Failed to force Fixed interpolation: {e}")
+        selected_layer_ids = model.layers_selector().all_included_layer_ids()
+        
+        if len(frames) > 1:
+            for layer_id in selected_layer_ids:
+                try:
+                    layer_obj = lv.layer(layer_id)
+                    section_starts = set()
+                    
+                    # 選択範囲の各フレーム（※終端フレームの直前まで）が所属しているセクションの開始位置を取得
+                    # end_frameは補間の結果としての到達点なので、end_frameから始まるセクションは範囲外として除外されます。
+                    for frame in range(start_frame, end_frame):
+                        try:
+                            # 該当フレームが属しているセクションの開始フレーム（キー位置）を取得
+                            sec_pos = layer_obj.actual_section_pos(frame)
+                            if sec_pos is not None:
+                                section_starts.add(sec_pos)
+                        except Exception:
+                            pass
+                            
+                    # 割り出した「選択範囲に掛かっているセクションの開始キー」にのみFixedを適用
+                    for pos in section_starts:
+                        try:
+                            le.change_section(pos, layer_id, force_fixed)
+                        except Exception:
+                            pass
+                except Exception as e:
+                    log(f"Failed to process layer {layer_id}: {e}")
 
         for i, frame in enumerate(frames):
             t = easing_table[i]
