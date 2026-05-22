@@ -7,7 +7,6 @@ This is an easing add-on for Cascadeur.<br>
 
 It will make your animations even MORE captivating 💫<br>
 
-⚠️Currently in beta testing.
 
 <br>
 
@@ -33,7 +32,9 @@ This application is used by combining a **script for Cascadeur** and a **GUI app
  
 
 ## ■ Usage
-1. Launch `417_Easing_Bridge.exe`.
+1. Launch `417_Easing_Bridge.exe`.<br>
+　(A blue warning screen will appear at first. Click "More info" then "Run anyway". <br>
+　  It’s just a standard warning for unrecognized apps.)
 2. Select an object and an interval of frames in Cascadeur.
 3. Design the curve using the Easing Bridge GUI.
 4. Press **Ctrl+B** / **Cmd+B** in Cascadeur to bake the curve.<br>
@@ -61,7 +62,7 @@ This application is used by combining a **script for Cascadeur** and a **GUI app
 　Delete `easing_bridge.py` from Cascadeur's `commands` folder.<br>
 　Path example: `C:\Program Files\Cascadeur\resources\scripts\python\commands`
 3. **Delete the application** <br>
-　Move the extracted application folder (e.g., `417_easing_bridge_v0.9.0` folder) to the Recycle Bin.
+　Move the extracted application folder (e.g., `417_easing_bridge_v1.0.0` folder) to the Recycle Bin.
 
 <br>
 
@@ -100,7 +101,6 @@ The GUI executable of this application is built using the following open-source 
 
 - **[PySide6](https://doc.qt.io/qtforpython/)**: LGPL v3.0 License
 - **[Python](https://www.python.org/)**: PSF License
-- *(If there are any other libraries used, such as pynput, list them here)*
 
 <br>
 
