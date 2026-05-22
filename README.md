@@ -71,7 +71,7 @@ This application is used by combining a **script for Cascadeur** and a **GUI app
 - Always save (backup) your scene before applying easing.
 - When applying, make sure to click the Cascadeur window to make it active.
 - If you want to redo the easing, press `Ctrl+Z` to undo it first, then apply it again.
-- For rig models, please use joint mode (to prevent missing areas like fingers).
+- For rig models, please apply it in joint mode (to prevent missing areas like fingers).
 - For curves that exceed the graph boundaries, rig parts may stretch or behave unusually due to the specifications of the rig structure.
 - If it does not work properly, try restarting or reinstalling Cascadeur and this add-on.
 - For other issues, please check the [issues](../../issues) page.
