@@ -75,7 +75,7 @@ This application is used by combining a **script for Cascadeur** and a **GUI app
 　Additionally, for rigged models, it is recommended to use only graphs that stay within the frame (to prevent parts from stretching).
 - If it does not work properly, try restarting or reinstalling Cascadeur and this add-on.
 - For other issues, please check the [issues](../../issues) page.
-  If the problem persists, please contact the author via [issues](../../issues) / [X](https://x.com/417_Butter) / [YouTube](https://www.youtube.com/@417_Butter).
+  If the problem persists, please contact the author via [issues](../../issues) / [X](https://x.com/417_Butter) / [YouTube](https://youtu.be/kQZpaUDdBus).
 
 <br>
 
