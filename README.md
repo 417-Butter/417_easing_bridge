@@ -112,6 +112,13 @@ The GUI executable of this application is built using the following open-source 
 
 <br>
 
+## 
+Creator(417_Butter)：[X](https://x.com/417_Butter) | [YouTube](https://www.youtube.com/@417_Butter) | [GitHub](https://github.com/417-Butter/417_easing_bridge#-417_easing_bridge)
+
+
 🎬 **I also make [Cascadeur tutorials](https://www.youtube.com/@417_Butter) on Youtube!**
 
-- Creator(417_Butter)：[X](https://x.com/417_Butter) | [YouTube](https://www.youtube.com/@417_Butter) | [GitHub](https://github.com/417-Butter/417_easing_bridge#-417_easing_bridge)
+<br>
+
+[<img width="1790" height="1456" alt="youtube_video" src="https://github.com/user-attachments/assets/987dc072-0066-486c-88b5-e8067c1185fc" />](https://www.youtube.com/@417_Butter)
+
