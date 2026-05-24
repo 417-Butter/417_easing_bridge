@@ -17,39 +17,50 @@ import tempfile
 # ホットキー自動登録 (Win / Mac / Linux 対応版)
 # ==============================================================
 def setup_initial_hotkey():
+    # INI書き込み用のコマンド名（半角スペースは %20 にエスケープ）
     target_command_ini = "Easing%20Bridge_417.Bake"  
     system = platform.system()
     
+    # OSに合わせてホットキーを動的に変更
     if system == 'Darwin':
-        target_hotkey = "Cmd+B"
+        target_hotkey = "Cmd+B"   # Macの場合は Command+B
     else:
-        target_hotkey = "Ctrl+B"
+        target_hotkey = "Ctrl+B"  # Win/Linuxの場合は Ctrl+B
 
+    # 1. OSごとに設定フォルダのパスを特定する
     if system == 'Windows':
         local_app_data = os.environ.get('LOCALAPPDATA')
         if not local_app_data:
             return
         ini_dir = os.path.join(local_app_data, "Nekki Limited", "Cascadeur")
+        
     elif system == 'Linux':
         ini_dir = os.path.join(os.path.expanduser('~'), ".local", "share", "Nekki Limited", "Cascadeur")
-    elif system == 'Darwin':
+        
+    elif system == 'Darwin': # Mac OS
         ini_dir = os.path.join(os.path.expanduser('~'), "Library", "Application Support", "Nekki Limited", "Cascadeur")
         if not os.path.exists(ini_dir):
             ini_dir = os.path.join(os.path.expanduser('~'), ".local", "share", "Nekki Limited", "Cascadeur")
+            
     else:
-        return
+        return # 未知のOSはスキップ
 
+    # 2. iniファイルの存在確認
     ini_path = os.path.join(ini_dir, "Hotkey_settings.ini")
     if not os.path.exists(ini_path):
         return
 
+    # 3. 登録処理
     with open(ini_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
+    # 既に登録済みの場合はスキップ、またはショートカットキーが他の機能で使われている場合もスキップ
     for line in lines:
         stripped = line.strip()
         if stripped.startswith(target_command_ini + "="):
             return 
+        
+        # 既にCtrl+Bなどが他の機能に割り当てられているかチェック
         if "=" in stripped:
             key_assigned = stripped.split("=", 1)[1].strip()
             if key_assigned.lower() == target_hotkey.lower():
@@ -84,6 +95,7 @@ except Exception:
 # ==============================================================
 
 def command_name():
+    # ツール上の登録名
     return "Easing Bridge_417.Bake"
 
 _log_buf = []
@@ -107,6 +119,9 @@ def flush_log(gui_dir=None):
         pass
 
 
+# --------------------------------------------------------------
+# 1. 外部GUIへのFetch機能
+# --------------------------------------------------------------
 def fetch_data_and_send(scene, host='127.0.0.1', port=65432):
     payload = {
         "command": "FETCH_RESULT",
@@ -137,6 +152,7 @@ def fetch_data_and_send(scene, host='127.0.0.1', port=65432):
                 "obj_ids":[str(obj_id) for obj_id in obj_ids]
             })
 
+    # Modifyの名前も統一
     scene.modify("Easing Bridge_417.Fetch", mod)
 
     try:
@@ -154,6 +170,9 @@ def fetch_data_and_send(scene, host='127.0.0.1', port=65432):
         scene.error(f"[{command_name()}] Error connecting to GUI during Fetch: {e}")
         return False
 
+# --------------------------------------------------------------
+# 2. 外部GUIからのBakeカーブ取得機能
+# --------------------------------------------------------------
 def request_curve(scene, host='127.0.0.1', port=65432, silent=False):
     payload = {"command": "REQUEST_CURVE"}
     try:
@@ -181,6 +200,9 @@ def request_curve(scene, host='127.0.0.1', port=65432, silent=False):
             scene.error(f"[{command_name()}] Error receiving curve: {e}")
         return None
 
+# --------------------------------------------------------------
+# ヘルパー関数群（Bake補間用）
+# --------------------------------------------------------------
 def euler_to_quat(euler):
     cx = math.cos(euler[0] * 0.5)
     sx = math.sin(euler[0] * 0.5)
@@ -229,7 +251,6 @@ def slerp(q1, q2, t):
     return res / np.linalg.norm(res)
 
 def interpolate_value(val_start, val_end, t, is_rot=False):
-    # 余計なスキップ処理を削除し、一番最初の元コードと全く同じ内容に戻しました
     if is_rot:
         try:
             trnsf_euler_start = csc.math.Rotation.to_euler_angles(val_start)
@@ -276,6 +297,9 @@ def interpolate_value(val_start, val_end, t, is_rot=False):
     return val_start
 
 
+# --------------------------------------------------------------
+# 3. メインの実行フロー (Fetch -> Bake)
+# --------------------------------------------------------------
 def run(scene):
     if not fetch_data_and_send(scene):
         return
@@ -369,45 +393,28 @@ def run(scene):
             ])
 
             actuals = set()
-            valid_nodes = []
-            
-            def try_add_node(n):
-                if n in node_objects:
-                    obj = node_objects[n]
-                    try:
-                        _ = obj.value(frames[0])
-                        valid_nodes.append((n, obj))
-                        actuals.add(obj.data_id())
-                    except Exception:
-                        pass 
-
+            valid_nodes =[]
             for n in target_node_names:
-                try_add_node(n)
+                if n in node_objects:
+                    valid_nodes.append((n, node_objects[n]))
+                    actuals.add(node_objects[n].data_id())
 
             if not valid_nodes:
                 fallback_nodes = ['Position', 'Rotation', 'Local Position', 'Local Rotation', 'Local Scale']
                 for n in fallback_nodes:
-                    if n not in [v[0] for v in valid_nodes]:
-                        try_add_node(n)
+                    if n in node_objects and n not in [v[0] for v in valid_nodes]:
+                        valid_nodes.append((n, node_objects[n]))
+                        actuals.add(node_objects[n].data_id())
 
             if not valid_nodes:
                 log(f"  -> SKIP: No valid transform nodes found")
                 continue
 
             orig_values = {}
-            safe_valid_nodes = []
             for node_name, obj in valid_nodes:
-                try:
-                    vals = []
-                    for frame in frames:
-                        vals.append(obj.value(frame))
-                    orig_values[node_name] = vals
-                    safe_valid_nodes.append((node_name, obj))
-                except Exception as e:
-                    if obj.data_id() in actuals:
-                        actuals.remove(obj.data_id())
-            
-            valid_nodes = safe_valid_nodes
+                orig_values[node_name] = []
+                for frame in frames:
+                    orig_values[node_name].append(obj.value(frame))
 
             log(f"  Target Nodes: {[n for n,_ in valid_nodes]}")
 
@@ -426,6 +433,9 @@ def run(scene):
         for d in obj_data:
             all_actuals.update(d['actuals'])
 
+        # ==============================================================
+        # 補間の事前Fixed化（選択範囲にかかる補間セクションのみを正確に処理する）
+        # ==============================================================
         def force_fixed(section):
             section.interval.interpolation = csc.layers.layer.Interpolation.FIXED
 
@@ -437,14 +447,18 @@ def run(scene):
                     layer_obj = lv.layer(layer_id)
                     section_starts = set()
                     
+                    # 選択範囲の各フレーム（※終端フレームの直前まで）が所属しているセクションの開始位置を取得
+                    # end_frameは補間の結果としての到達点なので、end_frameから始まるセクションは範囲外として除外されます。
                     for frame in range(start_frame, end_frame):
                         try:
+                            # 該当フレームが属しているセクションの開始フレーム（キー位置）を取得
                             sec_pos = layer_obj.actual_section_pos(frame)
                             if sec_pos is not None:
                                 section_starts.add(sec_pos)
                         except Exception:
                             pass
                             
+                    # 割り出した「選択範囲に掛かっているセクションの開始キー」にのみFixedを適用
                     for pos in section_starts:
                         try:
                             le.change_section(pos, layer_id, force_fixed)
@@ -453,14 +467,7 @@ def run(scene):
                 except Exception as e:
                     log(f"Failed to process layer {layer_id}: {e}")
 
-        # 各フレームに対してベイクを適用
         for i, frame in enumerate(frames):
-            
-            # 【重要】始点（0フレーム目）と終点（最後のフレーム）は完全にスキップ
-            # これにより始点と終点のポーズが適用前後で変化する問題を防ぎます
-            if total_frames > 1 and (i == 0 or i == total_frames - 1):
-                continue
-
             t = easing_table[i]
             src_pos = t * (total_frames - 1)
             

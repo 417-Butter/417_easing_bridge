@@ -230,7 +230,7 @@ class PresetListWidget(QListWidget):
 class EasingBridgeApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("417_Easing Bridge v1.0.1")
+        self.setWindowTitle("417_Easing Bridge v1.0.0")
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
 
         self.server = EasingBridgeServer(self, port=65432)
