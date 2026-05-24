@@ -229,11 +229,7 @@ def slerp(q1, q2, t):
     return res / np.linalg.norm(res)
 
 def interpolate_value(val_start, val_end, t, is_rot=False):
-    if t <= 0.000001:
-        return val_start
-    if t >= 0.999999:
-        return val_end
-
+    # 余計なスキップ処理を削除し、一番最初の元コードと全く同じ内容に戻しました
     if is_rot:
         try:
             trnsf_euler_start = csc.math.Rotation.to_euler_angles(val_start)
@@ -460,10 +456,8 @@ def run(scene):
         # 各フレームに対してベイクを適用
         for i, frame in enumerate(frames):
             
-            # -----------------------------------------------------------
             # 【重要】始点（0フレーム目）と終点（最後のフレーム）は完全にスキップ
-            #  CascadeurのIKやオイラー角の再計算によるポーズ破綻を100%防ぐための処置です。
-            # -----------------------------------------------------------
+            # これにより始点と終点のポーズが適用前後で変化する問題を防ぎます
             if total_frames > 1 and (i == 0 or i == total_frames - 1):
                 continue
 
