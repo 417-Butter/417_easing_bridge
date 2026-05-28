@@ -392,29 +392,50 @@ def run(scene):
                 'IK Direction', 'LocalDirection', 'Direction'
             ])
 
-            actuals = set()
             valid_nodes =[]
             for n in target_node_names:
                 if n in node_objects:
                     valid_nodes.append((n, node_objects[n]))
-                    actuals.add(node_objects[n].data_id())
 
             if not valid_nodes:
                 fallback_nodes = ['Position', 'Rotation', 'Local Position', 'Local Rotation', 'Local Scale']
                 for n in fallback_nodes:
                     if n in node_objects and n not in [v[0] for v in valid_nodes]:
                         valid_nodes.append((n, node_objects[n]))
-                        actuals.add(node_objects[n].data_id())
 
             if not valid_nodes:
                 log(f"  -> SKIP: No valid transform nodes found")
                 continue
 
+            # ==========================================================
+            # 修正箇所: 値が取得できないノード（アニメーションデータ未保持など）を除外する
+            # ==========================================================
             orig_values = {}
+            working_valid_nodes = []
+            working_actuals = set()
+            
             for node_name, obj in valid_nodes:
-                orig_values[node_name] = []
-                for frame in frames:
-                    orig_values[node_name].append(obj.value(frame))
+                try:
+                    # 全フレームの値が正常に取得できるかテスト
+                    vals = []
+                    for frame in frames:
+                        vals.append(obj.value(frame))
+                    orig_values[node_name] = vals
+                    working_valid_nodes.append((node_name, obj))
+                    working_actuals.add(obj.data_id())
+                except Exception as e:
+                    # 取得に失敗したノードはログに残してスキップ
+                    log(f"  -> SKIP Node '{node_name}': Data unavailable or does not exist")
+                    continue
+            
+            # エラーが出なかったノードのみに更新
+            valid_nodes = working_valid_nodes
+            actuals = working_actuals
+
+            if not valid_nodes:
+                log(f"  -> SKIP: No readable transform nodes found after testing")
+                continue
+            # ==========================================================
 
             log(f"  Target Nodes: {[n for n,_ in valid_nodes]}")
 
@@ -493,7 +514,12 @@ def run(scene):
                     val_hi = d['orig_values'][node_name][src_hi]
                     
                     new_val = interpolate_value(val_lo, val_hi, frac, is_rot=is_rot)
-                    obj.set_value(new_val, frame)
+                    
+                    # 修正箇所: 値のセット時も念のためエラーを回避
+                    try:
+                        obj.set_value(new_val, frame)
+                    except Exception:
+                        pass
 
             scene_updater.run_update(all_actuals, frame)
 
