@@ -62,7 +62,7 @@ This application is used by combining a **script for Cascadeur** and a **GUI app
 　Delete `easing_bridge.py` from Cascadeur's `commands` folder.<br>
 　Path example: `C:\Program Files\Cascadeur\resources\scripts\python\commands`
 3. **Delete the application** <br>
-　Move the extracted application folder (e.g., `417_easing_bridge_v1.0.0` folder) to the Recycle Bin.
+　Move the extracted application folder (e.g., `417_easing_bridge_v1.0.2` folder) to the Recycle Bin.
 
 <br>
 
