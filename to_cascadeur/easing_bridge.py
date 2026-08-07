@@ -94,9 +94,15 @@ except Exception:
 # コマンド本体
 # ==============================================================
 
-def command_name():
+# --- 統合版: Cascadeur 2026.2 では name()、2026.1以前では command_name() が必要 ---
+# 両方の関数を定義することで、どちらのバージョンでも動作します。
+
+def name():
     # ツール上の登録名
     return "Easing Bridge_417.Bake"
+
+# 2026.1以前との互換性のためエイリアスを定義
+command_name = name
 
 _log_buf = []
 
@@ -167,7 +173,7 @@ def fetch_data_and_send(scene, host='127.0.0.1', port=65432):
             s.sendall(header + payload_bytes)
         return True
     except Exception as e:
-        scene.error(f"[{command_name()}] Error connecting to GUI during Fetch: {e}")
+        scene.error(f"[{name()}] Error connecting to GUI during Fetch: {e}")
         return False
 
 # --------------------------------------------------------------
@@ -185,7 +191,7 @@ def request_curve(scene, host='127.0.0.1', port=65432, silent=False):
             s.sendall(header + payload_bytes)
             data = s.recv(4)
             if len(data) < 4:
-                if not silent: scene.error(f"[{command_name()}] Empty response from GUI")
+                if not silent: scene.error(f"[{name()}] Empty response from GUI")
                 return None
             res_len = struct.unpack(">I", data)[0]
             res_data = b""
@@ -197,7 +203,7 @@ def request_curve(scene, host='127.0.0.1', port=65432, silent=False):
             return json.loads(res_data.decode('utf-8'))
     except Exception as e:
         if not silent:
-            scene.error(f"[{command_name()}] Error receiving curve: {e}")
+            scene.error(f"[{name()}] Error receiving curve: {e}")
         return None
 
 # --------------------------------------------------------------
@@ -319,7 +325,7 @@ def run(scene):
         log(f"Waiting for GUI response... (Attempt {attempt + 1}/{max_retries})")
 
     if not curve_data or curve_data.get("command") != "CURVE_DATA":
-        scene.error(f"[{command_name()}] Invalid or missing curve data from GUI.")
+        scene.error(f"[{name()}] Invalid or missing curve data from GUI.")
         flush_log()
         return
 
@@ -526,4 +532,4 @@ def run(scene):
         flush_log(gui_dir)
         scene.success(f"Easing Bridge: Bake successfully applied to {len(obj_data)} objects!")
 
-    scene.modify_update_with_session(command_name(), mod)
+    scene.modify_update_with_session(name(), mod)
