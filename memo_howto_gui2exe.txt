@@ -1,0 +1,19 @@
+[PythonでGUIフォルダをexe化するときのコマンド]
+１．guiフォルダを右クリック→ターミナルで開く
+２．以下をコピペ
+python -m PyInstaller main.py --clean --onefile --noconsole --icon=icon.ico --add-data "icon.ico;." --name 417_Easing_Bridge
+ーーー
+※動作テスト用（エラー確認のためにコンソールを出す）
+python -m PyInstaller main.py --clean --onefile --icon=icon.ico --add-data "icon.ico;." --name 417_Easing_Bridge
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+[Command to convert the GUI folder into an .exe using Python]
+1. Right-click the `gui` folder → **Open in Terminal**
+2. Copy and paste the following command:
+python -m PyInstaller main.py --clean --onefile --noconsole --icon=icon.ico --add-data "icon.ico;." --name 417_Easing_Bridge
+ーーー
+※ For testing (shows the console to check for errors):**
+python -m PyInstaller main.py --clean --onefile --icon=icon.ico --add-data "icon.ico;." --name 417_Easing_Bridge
