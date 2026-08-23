@@ -82,7 +82,7 @@ This application is used by combining a **script for Cascadeur** and a **GUI app
 ## 💻 SYSTEM REQUIREMENTS
 
 - **OS**: Windows 11
-- **Cascadeur**: ver. 2025.3 or later
+- **Cascadeur**: 2025.3 / 2026.1 / 2026.2
 
 <br>
 
